@@ -86,6 +86,8 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.2.0")
     testImplementation("androidx.room:room-testing:2.6.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation(kotlin("test"))
 
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -96,4 +98,8 @@ dependencies {
 tasks.register("coverageVerificationInfo") {
     group = "verification"
     description = "Placeholder task: configure a JaCoCo threshold after establishing a baseline."
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

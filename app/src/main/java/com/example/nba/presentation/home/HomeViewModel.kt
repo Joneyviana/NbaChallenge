@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlin.coroutines.cancellation.CancellationException
 
 
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val observeTeams: ObserveTeamsUseCase,
@@ -33,18 +34,13 @@ class HomeViewModel @Inject constructor(
     private fun startObservingTeams() {
         viewModelScope.launch {
             observeTeams()
-                .catch { exception ->
-                    _uiState.update {
-                        it.copy(error = exception.message)
-                    }
+                .catch {
+                    updateError("Erro ao carregar os times")
                 }
-                .collect { teams: List<Team> ->
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            teams = sortTeams(
-                                teams,
-                                currentState.sortBy
-                            )
+                .collect { teams ->
+                    _uiState.update { state ->
+                        state.copy(
+                            teams = sortTeams(teams, state.sortBy)
                         )
                     }
                 }
@@ -52,10 +48,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSortChanged(sortBy: TeamSort) {
-        _uiState.update { currentState ->
-            currentState.copy(
+        _uiState.update { state ->
+            state.copy(
                 sortBy = sortBy,
-                teams = sortTeams(currentState.teams, sortBy)
+                teams = sortTeams(state.teams, sortBy)
             )
         }
     }
@@ -71,9 +67,7 @@ class HomeViewModel @Inject constructor(
             } catch (exception: CancellationException) {
                 throw exception
             } catch (_: Exception) {
-                _uiState.update {
-                    it.copy(error = "Erro ao atualizar os times")
-                }
+                updateError("Erro ao atualizar os times")
             } finally {
                 _uiState.update {
                     it.copy(isRefreshing = false)
@@ -82,14 +76,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun updateError(message: String) {
+        _uiState.update {
+            it.copy(error = message)
+        }
+    }
+
     private fun sortTeams(
         teams: List<Team>,
         sortBy: TeamSort
-    ): List<Team> {
-        return when (sortBy) {
-            TeamSort.NAME -> teams.sortedBy { it.fullName }
-            TeamSort.CITY -> teams.sortedBy { it.city }
-            TeamSort.CONFERENCE -> teams.sortedBy { it.conference }
-        }
+    ): List<Team> = when (sortBy) {
+        TeamSort.NAME -> teams.sortedBy { it.fullName }
+        TeamSort.CITY -> teams.sortedBy { it.city }
+        TeamSort.CONFERENCE -> teams.sortedBy { it.conference }
     }
 }
