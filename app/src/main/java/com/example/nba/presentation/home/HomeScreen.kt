@@ -8,26 +8,32 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.nba.domain.model.Team
 
-private data class TeamRow(val name: String, val city: String, val conference: String)
 
 @Composable
-fun HomeScreen() {
-    val teams = remember {
-        listOf(
-            TeamRow("Atlanta Hawks", "Atlanta", "East"),
-            TeamRow("Boston Celtics", "Boston", "East"),
-            TeamRow("Golden State Warriors", "Golden State", "West")
-        )
+fun HomeScreen(
+    snackbarHostState: SnackbarHostState,
+    viewModel: HomeViewModel = hiltViewModel()) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            snackbarHostState.showSnackbar(error)
+        }
     }
+
     var sortBy by remember { mutableStateOf("Name") }
     var showSortDialog by remember { mutableStateOf(false) }
-    var selectedTeam by remember { mutableStateOf<TeamRow?>(null) }
+    var selectedTeam by remember { mutableStateOf<Team?>(null) }
 
     if (selectedTeam != null) {
         AlertDialog(
             onDismissRequest = { selectedTeam = null },
-            title = { Text(selectedTeam!!.name) },
+            title = { Text(selectedTeam!!.fullName) },
             text = { Text("Team details and paginated games will be loaded here.") },
             confirmButton = {
                 TextButton(onClick = { selectedTeam = null }) { Text("Back") }
@@ -47,18 +53,12 @@ fun HomeScreen() {
         }
         HorizontalDivider()
         LazyColumn {
-            items(teams.sortedBy {
-                when (sortBy) {
-                    "City" -> it.city
-                    "Conference" -> it.conference
-                    else -> it.name
-                }
-            }) { team ->
+            items(uiState.teams) { team ->
                 Row(
                     Modifier.fillMaxWidth().clickable { selectedTeam = team }.padding(vertical = 14.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(team.name, Modifier.weight(2f))
+                    Text(team.fullName, Modifier.weight(2f))
                     Text(team.city, Modifier.weight(1.5f))
                     Text(team.conference, Modifier.weight(1.5f))
                 }
@@ -76,6 +76,7 @@ fun HomeScreen() {
                     listOf("Name", "City", "Conference").forEach { option ->
                         TextButton(onClick = {
                             sortBy = option
+                            viewModel.onSortChanged(TeamSort.valueOf(option.uppercase()))
                             showSortDialog = false
                         }) { Text(option) }
                     }

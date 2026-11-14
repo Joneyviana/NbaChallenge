@@ -18,8 +18,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
+                val snackbarHostState = remember {
+                    SnackbarHostState()
+                }
                 var selectedTab by remember { mutableIntStateOf(0) }
                 Scaffold(
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
+                    },
                     bottomBar = {
                         NavigationBar {
                             NavigationBarItem(
@@ -38,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { padding ->
                     Box(Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-                        if (selectedTab == 0) HomeScreen() else PlayersScreen()
+                        if (selectedTab == 0) HomeScreen(snackbarHostState) else PlayersScreen()
                     }
                 }
             }

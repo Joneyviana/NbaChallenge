@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.collections.sortedBy
 import kotlinx.coroutines.flow.catch
+import kotlin.coroutines.cancellation.CancellationException
 
 
 @HiltViewModel
@@ -67,9 +68,11 @@ class HomeViewModel @Inject constructor(
 
             try {
                 refreshTeams()
-            } catch (exception: Exception) {
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (_: Exception) {
                 _uiState.update {
-                    it.copy(error = exception.message)
+                    it.copy(error = "Erro ao atualizar os times")
                 }
             } finally {
                 _uiState.update {
