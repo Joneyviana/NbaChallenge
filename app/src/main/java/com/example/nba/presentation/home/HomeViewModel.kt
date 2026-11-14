@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             observeTeams()
                 .catch {
-                    updateError("Erro ao carregar os times")
+                    updateError("Error loading teams")
                 }
                 .collect { teams ->
                     _uiState.update { state ->

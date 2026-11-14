@@ -1,4 +1,4 @@
-package com.example.nba.data.remote
+package com.example.nba.di
 
 import com.example.nba.BuildConfig
 import com.example.nba.data.remote.api.BallDontLieApi
