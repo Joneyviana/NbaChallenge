@@ -1,7 +1,9 @@
 package com.example.nba.di
 
+import com.example.nba.data.repository.GamesRepositoryImpl
 import com.example.nba.data.repository.PlayersRepositoryImpl
 import com.example.nba.data.repository.TeamsRepositoryImpl
+import com.example.nba.domain.repository.GamesRepository
 import com.example.nba.domain.repository.PlayersRepository
 import com.example.nba.domain.repository.TeamsRepository
 import dagger.Binds
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindPlayersRepository(
         impl: PlayersRepositoryImpl,
     ): PlayersRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindGamesRepository(
+        impl: GamesRepositoryImpl,
+    ): GamesRepository
 }
