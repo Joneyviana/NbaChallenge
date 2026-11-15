@@ -34,6 +34,10 @@ android {
         buildConfig = true
     }
 
+    testCoverage {
+        jacocoVersion = libs.versions.jacoco.get()
+    }
+
     buildTypes {
         debug {
             enableUnitTestCoverage = true
@@ -121,11 +125,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
 }
 
-
-tasks.register("coverageVerificationInfo") {
-    group = "verification"
-    description = "Placeholder task: configure a JaCoCo threshold after establishing a baseline."
-}
 
 tasks.withType<Test> {
     useJUnitPlatform()
