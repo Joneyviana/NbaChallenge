@@ -55,63 +55,72 @@ kotlin {
     jvmToolchain(17)
 }
 
+
 dependencies {
-    implementation("androidx.paging:paging-common:3.5.3")
-    implementation("androidx.test:core-ktx:1.7.0")
-    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    // Compose
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
 
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.activity:activity-compose:1.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.navigation:navigation-compose:2.8.8")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    // Android
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.test.core)
+    implementation(libs.androidx.activity.compose)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.room:room-paging:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.paging:paging-runtime-ktx:3.3.6")
-    implementation("androidx.paging:paging-compose:3.3.6")
+    // Lifecycle
+    implementation(libs.bundles.lifecycle)
 
-    implementation("com.google.dagger:hilt-android:2.55")
-    ksp("com.google.dagger:hilt-compiler:2.55")
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
+    ksp(libs.room.compiler)
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("io.mockk:mockk:1.13.16")
-    testImplementation("androidx.paging:paging-testing:3.3.6")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
-    testImplementation("app.cash.turbine:turbine:1.2.0")
-    testImplementation("androidx.room:room-testing:2.6.1")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("org.junit.vintage:junit-vintage-engine:5.11.4")
-    testImplementation("org.robolectric:robolectric:4.16.1")
+    // Paging
+    implementation(libs.paging.common)
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Retrofit / OkHttp
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Unit tests
+    testImplementation(libs.junit4)
+    testImplementation(libs.mockk)
+    testImplementation(libs.paging.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.junit5)
+    testImplementation(libs.junit.vintage)
+    testImplementation(libs.robolectric)
     testImplementation(kotlin("test"))
 
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("io.mockk:mockk-android:1.13.16")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2025.02.00"))
-    androidTestImplementation("androidx.test:runner:1.6.2")
+    // Instrumented tests
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.runner)
 }
+
 
 tasks.register("coverageVerificationInfo") {
     group = "verification"
