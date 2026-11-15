@@ -39,7 +39,7 @@ fun PlayerItem(
         )
 
         Text(
-            text = player.team.fullName,
+            text = player.teamFullName,
             modifier = Modifier.weight(1.5f),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
