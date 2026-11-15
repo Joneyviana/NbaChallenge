@@ -1,13 +1,12 @@
 package com.example.nba.presentation.game
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.nba.domain.model.Game
 import com.example.nba.presentation.components.EmptyContent
 import com.example.nba.presentation.components.ErrorContent
 import com.example.nba.presentation.components.LoadingContent
@@ -35,21 +33,7 @@ fun GameScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextButton(onClick = onBackClick) {
-                Text("< Home")
-            }
-
-            Text(
-                text = teamName,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
+        GameTitleHeader(teamName, onBackClick)
 
         when {
             uiState.games.isEmpty() && uiState.isRefreshing -> {
@@ -80,5 +64,30 @@ fun GameScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun GameTitleHeader(
+    teamName: String,
+    onBackClick: () -> Unit)
+{
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        TextButton(
+            onClick = onBackClick,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            Text("< Home")
+        }
+
+        Text(
+            text = teamName,
+            modifier = Modifier.align(Alignment.Center),
+            style = MaterialTheme.typography.titleLarge
+        )
     }
 }

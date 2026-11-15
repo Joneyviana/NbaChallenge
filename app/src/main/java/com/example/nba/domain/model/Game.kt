@@ -3,7 +3,7 @@ package com.example.nba.domain.model
 import java.time.LocalDate
 
 data class Game(
-    val id: Int,
+    val id: Long,
     val gameDate: LocalDate,
     val homeTeamName: String,
     val homeTeamScore: Int?,

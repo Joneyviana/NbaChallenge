@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.nba.domain.model.Game
 
 @Composable
-private fun GamesList(
+fun GamesList(
     games: List<Game>,
     modifier: Modifier = Modifier
 ) {
@@ -27,7 +27,7 @@ private fun GamesList(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
