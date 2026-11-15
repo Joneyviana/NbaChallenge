@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { padding ->
                     Box(Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-                        if (selectedTab == 0) HomeScreen(snackbarHostState) else PlayersScreen()
+                        if (selectedTab == 0) HomeScreen(snackbarHostState, ) else PlayersScreen()
                     }
                 }
             }

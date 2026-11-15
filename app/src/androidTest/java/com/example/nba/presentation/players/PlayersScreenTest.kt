@@ -34,18 +34,15 @@ class PlayersScreenTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private lateinit var getPlayers: GetPlayersUseCase
-    private lateinit var viewModel: PlayerViewModel
+    private val getPlayers: GetPlayersUseCase =  mockk()
+    private val viewModel: PlayerViewModel = PlayerViewModel(getPlayers)
 
     @Before
     fun setup() {
-        getPlayers = mockk()
-
         every {
             getPlayers(any())
         } returns flowOf(PagingData.empty())
 
-        viewModel = PlayerViewModel(getPlayers)
     }
 
     private fun setPlayersScreen(
