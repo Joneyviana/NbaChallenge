@@ -47,7 +47,7 @@ fun PlayersList(
             players.loadState.refresh is LoadState.Error -> {
                 item {
                     ErrorContent(
-                        message = "Não foi possível carregar os jogadores",
+                        message = "Unable to load the players",
                         onRetry = players::retry
                     )
                 }
@@ -80,7 +80,7 @@ private fun LazyListScope.AppendLoadingItem(
                     onClick = players::retry,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Não foi possível carregar mais jogadores. Tentar novamente")
+                    Text("Unable to load more players. Try again.")
                 }
             }
         }

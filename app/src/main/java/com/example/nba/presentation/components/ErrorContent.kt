@@ -44,7 +44,9 @@ fun ErrorContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        TextButton(onClick = onRetry) {
+        TextButton(
+            modifier = modifier.testTag("retry_button"),
+            onClick = onRetry) {
             Text("Try again")
         }
     }

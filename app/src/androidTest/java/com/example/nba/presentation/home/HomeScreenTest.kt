@@ -42,7 +42,8 @@ class HomeScreenTest {
                 snackbarHostState = remember {
                     SnackbarHostState()
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
+                onTeamClick = {}
             )
         }
     }
@@ -105,7 +106,7 @@ class HomeScreenTest {
         uiState.value = HomeUiState(
             teams = emptyList(),
             isRefreshing = false,
-            error = "Não foi possível carregar os times"
+            error = "Unable to load the teams"
         )
 
         setHomeScreen()
@@ -115,7 +116,7 @@ class HomeScreenTest {
             .assertIsDisplayed()
 
         composeRule
-            .onNodeWithText("Não foi possível carregar os times")
+            .onNodeWithText("Unable to load the teams")
             .assertIsDisplayed()
 
         composeRule
@@ -188,7 +189,7 @@ class HomeScreenTest {
         uiState.value = HomeUiState(
             teams = emptyList(),
             isRefreshing = false,
-            error = "Não foi possível carregar os times"
+            error = "Unable to load the teams"
         )
 
         setHomeScreen()

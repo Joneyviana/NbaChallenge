@@ -57,7 +57,7 @@ class GamesViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        error = "Não foi possível atualizar os jogos"
+                        error = "Unable to update the games"
                     )
                 }
             } finally {

@@ -26,7 +26,7 @@ object NetworkModule {
         val apiKey = BuildConfig.BALLDONTLIE_API_KEY
 
         check(apiKey.isNotBlank()) {
-            "BALLDONTLIE_API_KEY não foi configurada"
+            "BALLDONTLIE_API_KEY has not been set"
         }
 
         return Interceptor { chain ->
