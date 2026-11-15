@@ -10,6 +10,15 @@ android {
     namespace = "com.example.nba"
     compileSdk = 35
 
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.nba"
         minSdk = 26
@@ -48,6 +57,7 @@ kotlin {
 
 dependencies {
     implementation("androidx.paging:paging-common:3.5.3")
+    implementation("androidx.test:core-ktx:1.7.0")
     val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -84,17 +94,23 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.16")
+    testImplementation("androidx.paging:paging-testing:3.3.6")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
     testImplementation("app.cash.turbine:turbine:1.2.0")
     testImplementation("androidx.room:room-testing:2.6.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation("org.junit.vintage:junit-vintage-engine:5.11.4")
+    testImplementation("org.robolectric:robolectric:4.16.1")
     testImplementation(kotlin("test"))
 
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("io.mockk:mockk-android:1.13.16")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2025.02.00"))
+    androidTestImplementation("androidx.test:runner:1.6.2")
 }
 
 tasks.register("coverageVerificationInfo") {
