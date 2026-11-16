@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
@@ -153,6 +154,41 @@ class PlayersScreenTest {
 
         composeRule
             .onNodeWithTag("error_content")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun playersScreen_shouldDisplayPlayersWhenLoadingSucceeds() {
+        val player = Player(
+            id = 1,
+            firstName = "LeBron",
+            lastName = "James",
+            teamFullName = "Los Angeles Lakers"
+        )
+
+        val pagingFlow = flowOf(
+            PagingData.from(listOf(player))
+        )
+
+        setPlayersScreen(pagingFlow)
+
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule
+                .onAllNodesWithText("LeBron")
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+
+        composeRule
+            .onNodeWithText("LeBron")
+            .assertIsDisplayed()
+
+        composeRule
+            .onNodeWithText("James")
+            .assertIsDisplayed()
+
+        composeRule
+            .onNodeWithText("Los Angeles Lakers")
             .assertIsDisplayed()
     }
 }
