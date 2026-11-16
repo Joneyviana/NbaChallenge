@@ -1,89 +1,184 @@
-# NBA Challenge — Android
+# NBA Android App
 
-Starter project for the NBA technical challenge described in the supplied screenshots.
+An Android application developed with Kotlin to explore NBA information, focusing on software engineering best practices, clean architecture, local data persistence, and automated testing.
 
-## Stack
+## Technologies
 
-- Kotlin + Jetpack Compose
-- MVVM / Clean Architecture (single Gradle module, package boundaries)
-- Coroutines + Flow
-- Retrofit + OkHttp
-- Room
-- Paging 3 dependencies prepared
-- JUnit, MockK, Coroutines Test, Turbine and MockWebServer
-- Android Gradle Plugin unit-test coverage
-- GitHub Actions CI
+- **Kotlin** – primary programming language.
+- **Jetpack Compose** – declarative UI toolkit.
+- **MVVM** – presentation layer architecture pattern.
+- **Clean Architecture** – separation of presentation, domain, and data layers.
+- **Kotlin Coroutines and StateFlow** – asynchronous programming and state management.
+- **Hilt** – dependency injection.
+- **Retrofit and OkHttp** – API communication.
+- **Room** – local data persistence.
+- **Paging 3** – paginated player loading.
+- **JUnit 5 and MockK** – unit testing.
+- **Jetpack Compose UI Testing** – UI testing.
 
-## Important API note
+## Features
 
-The current BALLDONTLIE NBA API requires an API key in the `Authorization` header and uses cursor pagination (`meta.next_cursor`). The API host is `https://api.balldontlie.io/`; NBA routes use the `nba/v1/...` prefix.
+- Browse NBA teams.
+- Browse and search NBA players with pagination support.
+- View games for a selected team.
+- Persist data locally using Room.
+- Access previously stored information when the device is offline.
 
-Create an API key in the BALLDONTLIE account portal, then provide it to Gradle without committing it:
+## Architecture
 
-```bash
-./gradlew assembleDebug -PBALLDONTLIE_API_KEY=YOUR_API_KEY
-```
+The project follows a Clean Architecture approach, organized into three main layers.
 
-For Android Studio, add this to your user-level `~/.gradle/gradle.properties`:
+### Presentation
+
+Responsible for the user interface and screen state management.
+
+- Jetpack Compose.
+- ViewModels.
+- StateFlow.
+- Navigation Compose.
+
+### Domain
+
+Contains business rules and application contracts.
+
+- Models.
+- Use Cases.
+- Repository interfaces.
+
+### Data
+
+Responsible for data access and integration with external services.
+
+- Repository implementations.
+- Retrofit API.
+- Room Database.
+- DAOs.
+- DTOs and data mapping.
+
+The data flow follows this structure:
+
+`Presentation → Domain → Data`
+
+## Requirements
+
+To run the project, you will need:
+
+- Android Studio.
+- JDK 17.
+- Android SDK 35.
+- An Android device or emulator running Android 8.0 (API 26) or higher.
+- A [Ball Don't Lie API](https://www.balldontlie.io/) key.
+
+## API Key Configuration
+
+The application uses the Ball Don't Lie API to retrieve NBA data.
+
+The API key will be provided separately via email.
+
+Before running the application, you must configure the key as a Gradle property.
+
+### Recommended option: configure user-level Gradle properties
+
+Open the `gradle.properties` file located in your user-level Gradle directory.
+
+Common locations:
+
+**macOS / Linux**
+
+`~/.gradle/gradle.properties`
+
+**Windows**
+
+`%USERPROFILE%\.gradle\gradle.properties`
+
+Add the following property:
 
 ```properties
-BALLDONTLIE_API_KEY=YOUR_API_KEY
+BALLDONTLIE_API_KEY=your_api_key
 ```
 
-Do not put API keys in source control. For a production app, a key embedded in a mobile binary can be extracted; a backend proxy is the safer approach.
+Replace `your_api_key` with the key provided by email.
 
-Official API docs: https://docs.balldontlie.io/
+Do not wrap the value in quotation marks.
 
-## Open the project
+### Alternative: configure project-level Gradle properties
 
-1. Open this directory in Android Studio.
-2. Install Android SDK 35.
-3. Use JDK 17 for the Gradle build.
-4. Configure Gradle 8.11.1 in the IDE if prompted.
-5. Configure the API key as described above.
+You can also add the property to the `gradle.properties` file located in the project root:
 
-This starter archive does not include the binary Gradle Wrapper JAR. Android Studio can sync it using a local Gradle installation; alternatively, generate the standard wrapper from a machine with Gradle 8.11.1 installed:
+```properties
+BALLDONTLIE_API_KEY=your_api_key
+```
+
+If you choose this option, make sure the file containing the API key is not committed to the repository.
+
+**Important:** Never expose your API key publicly or commit files containing sensitive credentials to GitHub.
+
+### How the API key is used
+
+The project reads the property through Gradle:
+
+```kotlin
+buildConfigField(
+    "String",
+    "BALLDONTLIE_API_KEY",
+    "\"${project.findProperty("BALLDONTLIE_API_KEY") ?: ""}\""
+)
+```
+
+The key is made available to the Android application through the `BuildConfig` class.
+
+After configuring the property, synchronize the project with Gradle in Android Studio.
+
+## Running the Application
+
+1. Clone the repository:
 
 ```bash
-gradle wrapper --gradle-version 8.11.1
+git clone <REPOSITORY_URL>
 ```
 
-## Run
+2. Open the project in Android Studio.
 
-After Gradle is available:
+3. Configure the API key as described in the previous section.
+
+4. Wait for Gradle synchronization to complete.
+
+5. Select an Android device or start an emulator.
+
+6. Run the application from Android Studio.
+
+### Build from the command line
+
+To build the Debug variant:
 
 ```bash
-gradle assembleDebug
-gradle testDebugUnitTest
-gradle createDebugUnitTestCoverageReport
+./gradlew :app:assembleDebug
 ```
 
-The HTML coverage report is generated under:
+On Windows:
 
-`app/build/reports/coverage/test/debug/index.html`
+```bash
+gradlew.bat :app:assembleDebug
+```
 
-## Current implementation status
+## Tests
 
-This is a starter scaffold, not a finished implementation of every screen in the challenge.
+The project includes unit tests covering business logic, ViewModels, and repository implementations.
 
-Included:
-- Compose Home and Players tab shells.
-- Team sorting UI sample.
-- Retrofit API contracts for teams, games and player search.
-- Room database, team/game entities and DAOs.
-- Team repository using Room as the observable local source.
-- One example unit test.
-- GitHub Actions workflow for unit tests, coverage artifact and debug APK.
+To run unit tests:
 
-Next implementation steps:
-1. Wire repositories and ViewModels into Compose screens using a dependency injection strategy.
-2. Add a Paging 3 `RemoteMediator` for games and persist remote pagination keys.
-3. Implement player search with debounce and cancellation.
-4. Add the player-to-team navigation flow and reuse the team-games screen.
-5. Add repository, DAO, RemoteMediator, ViewModel and Compose UI tests.
-6. Add a coverage threshold (line and branch) once a meaningful baseline exists.
-7. Add emulator-based instrumented tests as a separate CI job.
+```bash
+./gradlew :app:testDebugUnitTest
+```
 
-## API behavior to keep in mind
+## Test Coverage
 
-The API uses cursor-based pagination, not offset pagination. Use `meta.next_cursor` from each response as the next request's `cursor`. The current free tier may also impose rate limits. Handle 401, 429 and transient server errors explicitly.
+The project uses the JaCoCo integration provided by the Android Gradle Plugin.
+
+To generate the unit test coverage report:
+
+```bash
+./gradlew :app:createDebugUnitTestCoverageReport
+```
+
+The HTML report is generated
