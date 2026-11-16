@@ -178,7 +178,7 @@ The project uses the JaCoCo integration provided by the Android Gradle Plugin.
 To generate the unit test coverage report:
 
 ```bash
-./gradlew :app:createDebugUnitTestCoverageReport
+./gradlew :app:jacocoTestReport
 ```
 
 The HTML report is generated
